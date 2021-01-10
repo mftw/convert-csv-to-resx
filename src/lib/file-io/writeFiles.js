@@ -1,13 +1,13 @@
 const fs = require("fs");
 const iconv = require("iconv-lite");
 
-async function writeFile(file, renderFileTemplate) {
+async function writeFile(file, renderFileTemplate, encoding = "utf-8", config) {
     return new Promise((res) => {
         // Write all files with CRLF "\r\n"
         const renderResult = renderFileTemplate(...file.stringsToFile).split("\n").join("\r\n")
         const writeStream = fs.createWriteStream(file.fileName);
         writeStream.write(
-            iconv.encode(renderResult, "utf-8")
+            iconv.encode(renderResult, encoding, config)
         );
         const status = {
             error: null,
