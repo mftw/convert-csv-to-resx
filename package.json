@@ -12,7 +12,7 @@
   "license": "ISC",
   "preferGlobal": true,
   "bin": {
-    "outside": "bin/outside"
+    "outside": "bin/csv2resx"
   },
   "dependencies": {
     "csv-parser": "^3.0.0",
