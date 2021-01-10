@@ -18,7 +18,6 @@ const inputFileName =
     cmdArgs["inputFile"] ||
     (typeof cmdArgs._[0] === "string" && cmdArgs._[0].toLowerCase().includes(".csv") && cmdArgs._[0]);
 
-console.log("🚀 ~ file: index.js ~ line 19 ~ inputFileName", inputFileName);
 if (shouldGenerateTemplate) {
     const templateName =
         typeof shouldGenerateTemplate === "string" && shouldGenerateTemplate.length > 0
