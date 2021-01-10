@@ -17,8 +17,10 @@ function getRowsAndHeadersFromFile(filename) {
                 csv({
                     separator: ";",
                     mapHeaders: ({ header }) => {
-                        headers[header] = true;
-                        return header;
+                        if(header) {
+                            headers[header] = true;
+                            return header;
+                        }
                     },
                     mapValues: ({ value, header }) => {
                         if (header) {
