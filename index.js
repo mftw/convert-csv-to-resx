@@ -37,7 +37,7 @@ if (shouldGenerateTemplate) {
         const { generateFiles } = generateFilesImport;
         generateFiles(inputFileName, projectName);
     } else {
-        if (!inputFileName) {
+        if (!inputFileName || inputFileName === "false" || inputFileName === false) {
             console.log("[ERROR] Please provide a .csv file");
         } else {
             console.log("[ERROR] File: '" + inputFileName + "' not found");
