@@ -17,13 +17,20 @@ function getLandCodesAndInitials(lancodesAndInitials) {
     );
 }
 
-async function generateFiles(inputFileName = "Translate.csv", projectName = "projectname", enumName = "langs") {
+async function generateFiles(
+    inputFileName = "Translate.csv",
+    { projectName = "projectname", enumName = "langs", silent = false } = {},
+) {
     try {
+        if (!silent) console.log("[WORKING] Processing " + inputFileName + " ...");
+
         const [rows, headers] = await getRowsAndHeadersFromFile(inputFileName);
-        if(rows.length === 0) {
+        if (!silent) console.log("[DONE] CSV file processed");
+
+        if (rows.length === 0) {
             console.log("[ERROR] '" + inputFileName + "' does not contain any rows");
             console.log("Sure you're not using an empty template? Please check file.");
-            return ;
+            return;
         }
 
         const lancodesAndInitials = headers.slice(2);
@@ -51,18 +58,24 @@ async function generateFiles(inputFileName = "Translate.csv", projectName = "pro
         };
 
         const tsEnumFileJob = await writeTsEnumFile(enumFile, enumName);
-        reportErrors(tsEnumFileJob);
-        reportSuccess(tsEnumFileJob);
 
         const jsMapFileJob = await writeRowsToJsArrayFile(rows, projectName);
-        reportErrors(jsMapFileJob);
-        reportSuccess(jsMapFileJob);
 
         const resxFileJobs = await writeResxFiles(resxFiles);
-        reportErrors(resxFileJobs);
-        reportSuccess(resxFileJobs);
+
+        if (!silent) {
+            reportErrors(tsEnumFileJob);
+            reportSuccess(tsEnumFileJob);
+            reportErrors(jsMapFileJob);
+            reportSuccess(jsMapFileJob);
+            reportErrors(resxFileJobs);
+            reportSuccess(resxFileJobs);
+        }
+
+        return [tsEnumFileJob, jsMapFileJob, ...resxFileJobs];
     } catch (error) {
         console.log("[ERROR] Conversion:", error);
+        throw error;
     }
 }
 exports.generateFiles = generateFiles;

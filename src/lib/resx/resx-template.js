@@ -90,10 +90,6 @@ function renderResxTemplate(...strings) {
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PCF_Localization_Label" xml:space="preserve">
-    <value>Localization</value>
-    <comment>Label for localization input</comment>
-  </data>
   ${strings.reduce((renderString, rowToFile) => {
       const string = renderTranslationNode(...rowToFile);
       return (renderString += "\n" + string);

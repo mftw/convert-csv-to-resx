@@ -10,13 +10,18 @@ function getRowsAndHeadersFromFile(filename) {
     const headers = {};
 
     return new Promise((res, rej) => {
-        console.log("[WORKING] Processing " + filename + " ...");
         fs.createReadStream(filename)
             .pipe(iconv.decodeStream("utf-8"))
             .pipe(
                 csv({
                     separator: ";",
-                    mapHeaders: ({ header }) => {
+                    mapHeaders: ({ header, index }) => {
+                        if(index === 0) {
+                            return "Name"
+                        }
+                        if(index === 1) {
+                            return "Comment"
+                        }
                         if(header) {
                             headers[header] = true;
                             return header;
@@ -33,7 +38,6 @@ function getRowsAndHeadersFromFile(filename) {
                 rows[row.Name] = row;
             })
             .on("end", () => {
-                console.log("[DONE] CSV file processed");
                 res([Object.values(rows), Object.keys(headers)]);
             })
             .on("error", () => {

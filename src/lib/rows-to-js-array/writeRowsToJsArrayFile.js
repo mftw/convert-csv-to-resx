@@ -1,22 +1,23 @@
 const { writeFile } = require("../file-io/writeFiles");
 
-function renderTemplate(...strings) {
-    return `export const languageMap = ${JSON.stringify(strings[0], null, 4)};
+// function renderTemplate(...strings) {
+function renderTemplate(languageMap, rows) {
+    return `export const languageMap = ${JSON.stringify(languageMap, null, 4)};
 
 export const languageKeys = ${JSON.stringify(
-        strings[1].map((row) => row.Name),
+        rows.map((row) => row.Name),
         null,
         4,
     )}
 
-export function getTranslation(name: string, lang: string): string {
+export function getDefaultTranslation(name: string, lang = "1033", showOnNotFound = "No translation found"): string {
     try {
         if(languageMap[name][lang]) {
             return languageMap[name][lang]
         }
-        return ""
+        return showOnNotFound
     } catch(e) {
-        return ""
+        return showOnNotFound
     }
 }
 
