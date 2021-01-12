@@ -27,7 +27,7 @@ if (shouldGenerateTemplate) {
             cmdArgs["project-name"] || (typeof cmdArgs._[1] === "string" && cmdArgs._[1].length > 0)
                 ? cmdArgs._[1]
                 : inputFileName.slice(0, inputFileName.lastIndexOf("."));
-        generateFiles(inputFileName, { projectName });
+        generateFiles(inputFileName, { projectName, silent: false });
     } else {
         if (!inputFileName || inputFileName === "false" || inputFileName === false) {
             console.log("[ERROR] Please provide a .csv file");

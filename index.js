@@ -1,4 +1,4 @@
-const writeTsEnumFile = require("./src/lib/ts-enum/writeTsEnumFile.js");
+const writeTsTypeFile = require("./src/lib/ts-type/writeTsTypeFile.js");
 const writeFiles = require("./src/lib/file-io/writeFiles.js");
 const readCsvFile = require("./src/lib/file-io/readCsvFile.js");
 const generateFiles = require("./src/generateFiles.js");
@@ -15,5 +15,5 @@ module.exports = {
     ...resxTemplate,
     ...writeResxFiles,
     ...writeRowsToJsArrayFile,
-    ...writeTsEnumFile,
+    ...writeTsTypeFile,
 };

@@ -1,15 +1,28 @@
 const { writeFile } = require("../file-io/writeFiles");
+const { getLandCodesAndInitials } = require("../lang-code-initials/getLandCodesAndInitials");
 
-function renderTemplate(languageMap, rows) {
+function renderTemplate(languageMap, [lanCodes, initials, lancodesAndInitials], rows) {
+    const typeName = "TranslatedComponentType";
     return `export const languageMap = ${JSON.stringify(languageMap, null, 4)};
+    
+export const translatedComponents = ${JSON.stringify(
+    rows.map((row) => row.Name),
+    null,
+    4,
+)};
 
-export const languageKeys = ${JSON.stringify(
-        rows.map((row) => row.Name),
-        null,
-        4,
-    )}
+export const translatedComponentsCount = translatedComponents.length;
 
-export function getDefaultTranslation(name: keyof typeof languageMap, lang = "1033", showOnNotFound = "No translation found"): string {
+export const translatedLangsMap = ${JSON.stringify([...lanCodes, ...initials, ...lancodesAndInitials].reduce((acc, lang) => {
+    acc[lang] = true;
+    return acc
+}, {}), null, 4)};
+
+export type TranslatedLangsType = keyof typeof translatedLangsMap;
+
+export type ${typeName} = keyof typeof languageMap;
+
+export function getDefaultTranslation(name: ${typeName}, lang = "1033", showOnNotFound = "No translation found"): string {
     try {
         if(languageMap[name][lang]) {
             return languageMap[name][lang]
@@ -19,12 +32,12 @@ export function getDefaultTranslation(name: keyof typeof languageMap, lang = "10
         return showOnNotFound
     }
 }
-
 `;
 }
 exports.tsLanguageMapRenderTemplate = renderTemplate;
 
-function writeRowsToJsArrayFile(rows, projectName) {
+function writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName) {
+    const lanCodes = getLandCodesAndInitials(lancodesAndInitials)
     const namesWithTranslations = rows.reduce((acc, row) => {
         const [[nameKey, nameValue], [commentName, commentValue], ...langs] = Object.entries(row);
         acc[nameValue] = Object.fromEntries([
@@ -37,7 +50,7 @@ function writeRowsToJsArrayFile(rows, projectName) {
     }, {});
     const file = {
         fileName: "./" + projectName + "-locales.ts",
-        stringsToFile: [namesWithTranslations, rows],
+        stringsToFile: [namesWithTranslations, lanCodes, rows],
     };
     return writeFile(file, renderTemplate);
 }

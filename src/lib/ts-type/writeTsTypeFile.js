@@ -1,19 +1,19 @@
 const { writeFile } = require("../file-io/writeFiles");
 
 function renderTsEnumTemplate(enumName, enumVals) {
-    return `export enum ${enumName} { \n${enumVals.reduce((renderString, string, index, allStrings) => {
+    return `export type ${enumName} = \n${enumVals.reduce((renderString, string, index, allStrings) => {
         if (allStrings.length === 1) {
-            return `    '${string}',\n`;
+            return `    '${string}';\n`;
         }
         if (index === 0) {
-            return (renderString += `    ${string},\n`);
+            return (renderString += `    '${string}'\n`);
         }
         if (index === allStrings.length - 1) {
-            return (renderString += `    ${string},`);
+            return (renderString += `    | '${string}';`);
         }
-        return (renderString += `    ${string},\n`);
+        return (renderString += `    | '${string}'\n`);
     }, "")}
-}`;
+`;
 }
 exports.renderTsEnumTemplate = renderTsEnumTemplate;
 

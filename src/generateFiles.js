@@ -1,21 +1,8 @@
 const { writeResxFiles } = require("./lib/resx/writeResxFiles");
-const { writeTsEnumFile } = require("./lib/ts-enum/writeTsEnumFile");
 const { writeRowsToJsArrayFile } = require("./lib/rows-to-ts-array/writeRowsToTsArrayFile");
 const { getRowsAndHeadersFromFile } = require("./lib/file-io/readCsvFile");
 const { reportErrors, reportSuccess } = require("./lib/file-io/writeFiles");
-
-function getLandCodesAndInitials(lancodesAndInitials) {
-    return lancodesAndInitials.reduce(
-        (splittedLanCodesAndInitials, codeIni) => {
-            const [lanCodes, initials] = splittedLanCodesAndInitials;
-            const [lanCode, initial] = codeIni.split("_");
-            lanCodes.push(lanCode);
-            initials.push(initial);
-            return splittedLanCodesAndInitials;
-        },
-        [[], [], lancodesAndInitials],
-    );
-}
+const { getLandCodesAndInitials } = require("./lib/lang-code-initials/getLandCodesAndInitials");
 
 function escapeXml(unsafe) {
     return unsafe.replace(/[<>&'"]/g, (c) => {
@@ -31,7 +18,7 @@ function escapeXml(unsafe) {
 
 async function generateFiles(
     inputFileName = "Translate.csv",
-    { projectName = "projectname", enumName = "langs", silent = false } = {},
+    { projectName = "projectname", silent = true } = {},
 ) {
     try {
         if (!silent) console.log("[WORKING] Processing " + inputFileName + " ...");
@@ -63,28 +50,20 @@ async function generateFiles(
                 fileName,
             };
         });
-
-        const enumFile = {
-            fileName: `./${projectName}-${enumName}.ts`,
-            stringsToFile: rows.map((row) => row.Name),
-        };
-
-        const tsEnumFileJob = await writeTsEnumFile(enumFile, enumName);
-
-        const jsMapFileJob = await writeRowsToJsArrayFile(rows, projectName);
+        
+        const jsMapFileJob = await writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName);
 
         const resxFileJobs = await writeResxFiles(resxFiles);
 
         if (!silent) {
-            reportErrors(tsEnumFileJob);
-            reportSuccess(tsEnumFileJob);
             reportErrors(jsMapFileJob);
             reportSuccess(jsMapFileJob);
             reportErrors(resxFileJobs);
             reportSuccess(resxFileJobs);
         }
 
-        return [tsEnumFileJob, jsMapFileJob, ...resxFileJobs];
+        return [jsMapFileJob, ...resxFileJobs];
+
     } catch (error) {
         console.log("[ERROR] Conversion:", error);
         throw error;
