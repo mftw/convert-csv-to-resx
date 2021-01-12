@@ -22,6 +22,7 @@ export function getDefaultTranslation(name: keyof typeof languageMap, lang = "10
 
 `;
 }
+exports.tsLanguageMapRenderTemplate = renderTemplate;
 
 function writeRowsToJsArrayFile(rows, projectName) {
     const namesWithTranslations = rows.reduce((acc, row) => {
