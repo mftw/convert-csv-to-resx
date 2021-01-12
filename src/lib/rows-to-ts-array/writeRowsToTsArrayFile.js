@@ -10,7 +10,7 @@ export const languageKeys = ${JSON.stringify(
         4,
     )}
 
-export function getDefaultTranslation(name: string, lang = "1033", showOnNotFound = "No translation found"): string {
+export function getDefaultTranslation(name: keyof typeof languageMap, lang = "1033", showOnNotFound = "No translation found"): string {
     try {
         if(languageMap[name][lang]) {
             return languageMap[name][lang]

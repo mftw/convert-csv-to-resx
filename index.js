@@ -6,7 +6,7 @@ const generateFiles = require("./src/generateFiles.js");
 const resxTemplate = require("./src/lib/resx/resx-template.js");
 const writeResxFiles = require("./src/lib/resx/writeResxFiles.js");
 const makeCsvTemplateFile = require("./src/makeCsvTemplateFile.js");
-const writeRowsToJsArrayFile = require("./src/lib/rows-to-js-array/writeRowsToJsArrayFile.js");
+const writeRowsToJsArrayFile = require("./src/lib/rows-to-ts-array/writeRowsToTsArrayFile.js");
 
 module.exports = {
     ...makeCsvTemplateFile,

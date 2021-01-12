@@ -48,3 +48,11 @@ const csvFile = await makeCsvTemplateFile(
 )
 const files = await generateFiles(testFilename, { projectName, silent: true });
 ```
+
+## Encoding
+The .csv file gets `UTF-8-BOM` which forces MS Excel to respect character encoding.
+
+Other files gets standard `UTF-8`.
+
+## Line endings
+All files is generated with CRLF (Windows) line endings.

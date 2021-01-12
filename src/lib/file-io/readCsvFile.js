@@ -16,6 +16,9 @@ function getRowsAndHeadersFromFile(filename) {
                 csv({
                     separator: ";",
                     mapHeaders: ({ header, index }) => {
+                        if(header) {
+                            headers[header] = true;
+                        }
                         if(index === 0) {
                             return "Name"
                         }
@@ -23,7 +26,6 @@ function getRowsAndHeadersFromFile(filename) {
                             return "Comment"
                         }
                         if(header) {
-                            headers[header] = true;
                             return header;
                         }
                     },

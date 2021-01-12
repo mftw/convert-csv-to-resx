@@ -1,6 +1,6 @@
 const { writeResxFiles } = require("./lib/resx/writeResxFiles");
 const { writeTsEnumFile } = require("./lib/ts-enum/writeTsEnumFile");
-const { writeRowsToJsArrayFile } = require("./lib/rows-to-js-array/writeRowsToJsArrayFile");
+const { writeRowsToJsArrayFile } = require("./lib/rows-to-ts-array/writeRowsToTsArrayFile");
 const { getRowsAndHeadersFromFile } = require("./lib/file-io/readCsvFile");
 const { reportErrors, reportSuccess } = require("./lib/file-io/writeFiles");
 
@@ -15,6 +15,18 @@ function getLandCodesAndInitials(lancodesAndInitials) {
         },
         [[], [], lancodesAndInitials],
     );
+}
+
+function escapeXml(unsafe) {
+    return unsafe.replace(/[<>&'"]/g, (c) => {
+        switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+        }
+    });
 }
 
 async function generateFiles(
@@ -33,7 +45,7 @@ async function generateFiles(
             return;
         }
 
-        const lancodesAndInitials = headers;
+        const lancodesAndInitials = headers.slice(2);
         const [lanCodes, initials] = getLandCodesAndInitials(lancodesAndInitials);
         const resxFileNames = lanCodes.map((lanCode) => `./${projectName}.${lanCode}.resx`);
 
@@ -42,7 +54,7 @@ async function generateFiles(
             const initial = initials[index];
             const keyName = lancodesAndInitials[index];
             const stringsToFile = rows.map((row) => {
-                return [row.Name, row.Comment, row[keyName]];
+                return [escapeXml(row.Name), escapeXml(row.Comment), escapeXml(row[keyName])];
             });
             return {
                 lanCode,

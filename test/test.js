@@ -11,7 +11,7 @@ process.on("unhandledRejection", (result, error) => {
     let fileWriteErrors = [];
     let files = [];
     let generelError = null;
-    const deleteFilesAfterTest = false;
+    const deleteFilesAfterTest = true;
     try {
         const projectName = "Translate";
         const testFilename = projectName + ".csv";
@@ -19,7 +19,7 @@ process.on("unhandledRejection", (result, error) => {
             testFilename,
             /******/ "Name;Comment;0990_n-A;9999_no-where\n" +
                 /**/ "test-case1;auto generated test file;this is test case 1;lorem ipsum...\n" +
-                /**/ "rød-ræve-båd;tester dansk;testing danish;helt væk 🍔\n",
+                /**/ "ræve-rød-båd;tester dansk;testing danish;helt væk 🍔\n",
         );
         console.log("[TEST] generated ", testFilename, "Time:", Date.now() - startTime + "ms");
         const startTimeGenerateFiles = Date.now();
@@ -32,7 +32,6 @@ process.on("unhandledRejection", (result, error) => {
         console.error("[TEST] ERROR", err);
         generelError = err;
     } finally {
-        console.log("[TEST] done time: ", Date.now() - startTime + "ms");
         if (fileWriteErrors.length > 0) {
             generelError = true;
             fileWriteErrors.forEach((err, index, allErrors) =>
@@ -40,14 +39,18 @@ process.on("unhandledRejection", (result, error) => {
             );
         }
         if (deleteFilesAfterTest) {
+            const startTimeDelete = Date.now();
             files.forEach((file) => {
                 if (!file.error) {
                     // fs.rmSync(file.fileName, {}, () => console.log("deleted ", file.fileName));
                     fs.rmSync(file.fileName, { maxRetries: 10 });
                 }
             });
+            console.log("[TEST] deleted " + files.length + " files. Time: " + (Date.now() - startTimeDelete) + "ms");
         }
+        console.log("[TEST] done time: ", Date.now() - startTime + "ms");
         if (generelError) {
+            console.log("[TEST] generelError", generelError);
             return process.exit(1);
         }
         return process.exit(0);
