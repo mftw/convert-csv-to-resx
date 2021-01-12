@@ -21,7 +21,9 @@ async function writeFile(file, renderFileTemplate, encoding = "utf-8", config) {
             res(status);
         });
         writeStream.on("finish", () => {
-            status.success = true;
+            if(!status.error) {
+                status.success = true;
+            }
             // console.log("wrote all data to file");
         });
         writeStream.end(() => res(status));
