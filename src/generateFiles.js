@@ -33,7 +33,7 @@ async function generateFiles(
             return;
         }
 
-        const lancodesAndInitials = headers.slice(2);
+        const lancodesAndInitials = headers;
         const [lanCodes, initials] = getLandCodesAndInitials(lancodesAndInitials);
         const resxFileNames = lanCodes.map((lanCode) => `./${projectName}.${lanCode}.resx`);
 
