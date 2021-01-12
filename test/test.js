@@ -2,6 +2,10 @@ const fs = require("fs");
 const { generateFiles } = require("../src/generateFiles");
 const { makeCsvTemplateFile } = require("../src/makeCsvTemplateFile");
 
+process.on("unhandledRejection", (result, error) => {
+    process.exit(1);
+});
+
 (async () => {
     const startTime = Date.now();
     let fileWriteErrors = [];
@@ -22,11 +26,11 @@ const { makeCsvTemplateFile } = require("../src/makeCsvTemplateFile");
         files = await generateFiles(testFilename, { projectName, silent: true });
         const endTimeGenerateFiles = Date.now() - startTimeGenerateFiles + "ms";
         files.push(csvFile);
-        console.log("[TEST] genereted " + files.length + " files. Time:", endTimeGenerateFiles);
+        console.log("[TEST] generated " + files.length + " files. Time:", endTimeGenerateFiles);
         fileWriteErrors = files.filter((file) => Boolean(file.error));
     } catch (err) {
         console.error("[TEST] ERROR", err);
-        generelError = err
+        generelError = err;
     } finally {
         console.log("[TEST] done time: ", Date.now() - startTime + "ms");
         if (fileWriteErrors.length > 0) {
@@ -38,13 +42,14 @@ const { makeCsvTemplateFile } = require("../src/makeCsvTemplateFile");
         if (deleteFilesAfterTest) {
             files.forEach((file) => {
                 if (!file.error) {
-                    fs.rm(file.fileName, () => console.log("deleted ", file.fileName));
+                    // fs.rmSync(file.fileName, {}, () => console.log("deleted ", file.fileName));
+                    fs.rmSync(file.fileName, { maxRetries: 10 });
                 }
             });
         }
-        if(generelError) {
-            return process.exit(1)
+        if (generelError) {
+            return process.exit(1);
         }
-        return process.exit(0)
+        return process.exit(0);
     }
 })();
