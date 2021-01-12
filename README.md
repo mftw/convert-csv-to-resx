@@ -20,6 +20,12 @@ npx csv-to-resx --generate-template
 
 This will produce `CSVTemplateFile.csv` which you should rename to your project name e.g. `SuperApp.csv`.
 
+You can skip the renaming and generate the file with the correct name at once:
+```
+npx csv-to-resx --generate-template <ProjectName>
+```
+Where \<ProjectName> is the name you want to give the file.
+
 Now open the file in e.g. Excel and translate away.
 
 ## Converting from CSV file
@@ -29,7 +35,7 @@ Open a terminal in the folder containing the .csv file and type:
 ```
 npx csv-to-resx <FileName>.csv
 ``` 
-where \<FileName> is the name of the .csv file to convert.
+Where \<FileName> is the name of the .csv file to convert.
 
 
 # Development

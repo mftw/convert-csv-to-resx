@@ -1,6 +1,5 @@
 const { writeFile } = require("../file-io/writeFiles");
 
-// function renderTemplate(...strings) {
 function renderTemplate(languageMap, rows) {
     return `export const languageMap = ${JSON.stringify(languageMap, null, 4)};
 

@@ -11,7 +11,7 @@ process.on("unhandledRejection", (result, error) => {
     let fileWriteErrors = [];
     let files = [];
     let generelError = null;
-    const deleteFilesAfterTest = true;
+    const deleteFilesAfterTest = false;
     try {
         const projectName = "Translate";
         const testFilename = projectName + ".csv";
@@ -19,6 +19,7 @@ process.on("unhandledRejection", (result, error) => {
             testFilename,
             /******/ "Name;Comment;0990_n-A;9999_no-where\n" +
                 /**/ "test-case1;auto generated test file;this is test case 1;lorem ipsum...\n" +
+                /**/ "test-case2;\";\"&\"\";\";<div>trolling &</div>;lorem ipsum...\n" +
                 /**/ "ræve-rød-båd;tester dansk;testing danish;helt væk 🍔\n",
         );
         console.log("[TEST] generated ", testFilename, "Time:", Date.now() - startTime + "ms");
