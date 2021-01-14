@@ -25,7 +25,7 @@ function renderResxTemplate(...strings) {
                              type="xsd:string" />
               <xsd:attribute name="mimetype"
                              type="xsd:string" />
-              <xsd:attribute ref="xml:space" />https://marketplace.visualstudio.com/items?itemName=PrateekMahendrakar.resxpress
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">

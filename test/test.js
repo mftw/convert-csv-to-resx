@@ -20,6 +20,7 @@ process.on("unhandledRejection", (result, error) => {
             /******/ "Name;Comment;1033_n-A;9999_no-where\n" +
                 /**/ "test-case1;auto generated test file;this is test case 1;lorem ipsum...\n" +
                 /**/ "test-case2;&;<div>trolling &</div>;lorem ipsum...\n" +
+                /**/ "test-case3;&;;lorem ipsum...\n" +
                 /**/ "ræve-rød-båd;tester dansk;testing danish;helt væk 🍔\n",
         );
         console.log("[TEST] generated ", testFilename, "Time:", Date.now() - startTime + "ms");
