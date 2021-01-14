@@ -1,5 +1,5 @@
 const { writeFile } = require("../file-io/writeFiles");
-const { getLandCodesAndInitials } = require("../lang-code-initials/getLandCodesAndInitials");
+const { getLanCodesAndInitials } = require("../lang-code-initials/getLanCodesAndInitials");
 
 function renderTemplate(languageMap, [lanCodes, initials, lancodesAndInitials], rows) {
     const typeName = "TranslateNames";
@@ -31,7 +31,7 @@ export type ${typeName} = keyof typeof defaultStrings;
 exports.tsLanguageMapRenderTemplate = renderTemplate;
 
 function writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName) {
-    const lanCodes = getLandCodesAndInitials(lancodesAndInitials);
+    const lanCodes = getLanCodesAndInitials(lancodesAndInitials);
     const namesWithTranslations = rows.reduce((acc, row) => {
         const [[nameKey, nameValue], [commentName, commentValue], ...langs] = Object.entries(row);
         const deault1033 = langs.reduce((acc, [lang, value]) => {

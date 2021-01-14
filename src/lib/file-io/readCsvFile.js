@@ -5,7 +5,7 @@ const csv = require("csv-parser");
 // https://stackoverflow.com/questions/32375816/node-js-change-csv-file-encoding-programatically-and-parse-to-json
 const iconv = require("iconv-lite");
 
-function getRowsAndHeadersFromFile(filename) {
+async function getRowsAndHeadersFromFile(filename) {
     const rows = {};
     const headers = {};
 

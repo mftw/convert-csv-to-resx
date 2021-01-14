@@ -2,7 +2,7 @@ const { writeResxFiles } = require("./lib/resx/writeResxFiles");
 const { writeRowsToJsArrayFile } = require("./lib/rows-to-ts-array/writeRowsToTsArrayFile");
 const { getRowsAndHeadersFromFile } = require("./lib/file-io/readCsvFile");
 const { reportErrors, reportSuccess } = require("./lib/file-io/writeFiles");
-const { getLandCodesAndInitials } = require("./lib/lang-code-initials/getLandCodesAndInitials");
+const { getLanCodesAndInitials } = require("./lib/lang-code-initials/getLanCodesAndInitials");
 
 function escapeXml(unsafe) {
     return unsafe.replace(/[<>&'"]/g, (c) => {
@@ -33,7 +33,7 @@ async function generateFiles(
         }
 
         const lancodesAndInitials = headers.slice(2);
-        const [lanCodes, initials] = getLandCodesAndInitials(lancodesAndInitials);
+        const [lanCodes, initials] = getLanCodesAndInitials(lancodesAndInitials);
         const resxFileNames = lanCodes.map((lanCode) => `./${projectName}.${lanCode}.resx`);
 
         const resxFiles = resxFileNames.map((fileName, index) => {
@@ -50,7 +50,7 @@ async function generateFiles(
                 fileName,
             };
         });
-        
+
         const jsMapFileJob = await writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName);
 
         const resxFileJobs = await writeResxFiles(resxFiles);

@@ -6,6 +6,7 @@ const resxTemplate = require("./src/lib/resx/resx-template.js");
 const writeResxFiles = require("./src/lib/resx/writeResxFiles.js");
 const makeCsvTemplateFile = require("./src/makeCsvTemplateFile.js");
 const writeRowsToJsArrayFile = require("./src/lib/rows-to-ts-array/writeRowsToTsArrayFile.js");
+const getLanCodesAndInitials = require("./src/lib/lang-code-initials/getLanCodesAndInitials.js");
 
 module.exports = {
     ...makeCsvTemplateFile,
@@ -16,4 +17,5 @@ module.exports = {
     ...writeResxFiles,
     ...writeRowsToJsArrayFile,
     ...writeTsTypeFile,
+    ...getLanCodesAndInitials,
 };

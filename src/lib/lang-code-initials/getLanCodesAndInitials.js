@@ -1,4 +1,4 @@
-function getLandCodesAndInitials(lancodesAndInitials) {
+function getLanCodesAndInitials(lancodesAndInitials) {
   return lancodesAndInitials.reduce(
       (splittedLanCodesAndInitials, codeIni) => {
           const [lanCodes, initials] = splittedLanCodesAndInitials;
@@ -10,4 +10,4 @@ function getLandCodesAndInitials(lancodesAndInitials) {
       [[], [], lancodesAndInitials],
   );
 }
-exports.getLandCodesAndInitials = getLandCodesAndInitials;
+exports.getLanCodesAndInitials = getLanCodesAndInitials;

@@ -31,8 +31,8 @@ async function writeFile(file, renderFileTemplate, encoding = "utf-8", config) {
 }
 exports.writeFile = writeFile;
 
-async function writeFiles(files, renderFn) {
-    return Promise.all(files.map((file) => writeFile(file, renderFn)));
+async function writeFiles(files, renderFn, encoding = "utf-8", config) {
+    return Promise.all(files.map((file) => writeFile(file, renderFn, encoding = "utf-8", config)));
 }
 exports.writeFiles = writeFiles;
 
