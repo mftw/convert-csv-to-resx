@@ -1,6 +1,7 @@
-const { writeFile } = require("../file-io/writeFiles");
+import type { File } from "../../types/types";
+import { writeFile } from "../file-io/writeFiles";
 
-function renderTsEnumTemplate(enumName, enumVals) {
+export function renderTsEnumTemplate(enumName: string, enumVals: string[]) {
     return `export type ${enumName} = \n${enumVals.reduce((renderString, string, index, allStrings) => {
         if (allStrings.length === 1) {
             return `    '${string}';\n`;
@@ -15,10 +16,8 @@ function renderTsEnumTemplate(enumName, enumVals) {
     }, "")}
 `;
 }
-exports.renderTsEnumTemplate = renderTsEnumTemplate;
 
-async function writeTsEnumFile(file, enumName) {
-    const wrappedRender = (...stringsToFile) => renderTsEnumTemplate(enumName, stringsToFile);
+export async function writeTsEnumFile(file: File, enumName: string) {
+    const wrappedRender = (...stringsToFile: string[]) => renderTsEnumTemplate(enumName, stringsToFile);
     return writeFile(file, wrappedRender);
 }
-exports.writeTsEnumFile = writeTsEnumFile;

@@ -1,7 +1,9 @@
-const { writeFile } = require("../file-io/writeFiles");
-const { getLanCodesAndInitials } = require("../lang-code-initials/getLanCodesAndInitials");
+import { writeFile } from "../file-io/writeFiles";
+import { getLanCodesAndInitials } from "../lang-code-initials/getLanCodesAndInitials";
+import type { RawRows, Row } from "../../types/types";
 
-function renderTemplate(languageMap, [lanCodes, initials, lancodesAndInitials], rows) {
+function renderTemplate(languageMap: any, [lanCodes, initials, lancodesAndInitials]: [string[], string[], string[]], rows: Row[]) {
+
     const typeName = "TranslateNames";
     return `export const defaultStrings = ${JSON.stringify(languageMap, null, 4)};
     
@@ -17,7 +19,7 @@ export const translatedLangsMap = ${JSON.stringify(
         [...lanCodes, ...initials, ...lancodesAndInitials].reduce((acc, lang) => {
             acc[lang] = true;
             return acc;
-        }, {}),
+        }, {} as any),
         null,
         4,
     )};
@@ -28,11 +30,10 @@ export type ${typeName} = keyof typeof defaultStrings;
 
 `;
 }
-exports.tsLanguageMapRenderTemplate = renderTemplate;
 
-function writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName) {
+export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows, projectName: string) {
     const lanCodes = getLanCodesAndInitials(lancodesAndInitials);
-    const namesWithTranslations = rows.reduce((acc, row) => {
+    const namesWithTranslations = rows.reduce((acc: Row, row) => {
         const [[nameKey, nameValue], [commentName, commentValue], ...langs] = Object.entries(row);
         const deault1033 = langs.reduce((acc, [lang, value]) => {
             if(lang.includes("1033") && value) {
@@ -53,12 +54,11 @@ function writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName) {
         // ]);
 
         return acc;
-    }, {});
+    }, {} as Row );
     const file = {
         fileName: "./" + projectName + "-locales.ts",
         stringsToFile: [namesWithTranslations, lanCodes, rows],
     };
-    return writeFile(file, renderTemplate);
+    return writeFile(file as any, renderTemplate as any);
 }
 
-exports.writeRowsToJsArrayFile = writeRowsToJsArrayFile;

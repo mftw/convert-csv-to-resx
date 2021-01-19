@@ -1,22 +1,23 @@
-const { writeResxFiles } = require("./lib/resx/writeResxFiles");
-const { writeRowsToJsArrayFile } = require("./lib/rows-to-ts-array/writeRowsToTsArrayFile");
-const { getRowsAndHeadersFromFile } = require("./lib/file-io/readCsvFile");
-const { reportErrors, reportSuccess } = require("./lib/file-io/writeFiles");
-const { getLanCodesAndInitials } = require("./lib/lang-code-initials/getLanCodesAndInitials");
+import { writeResxFiles } from "./lib/resx/writeResxFiles";
+import { writeRowsToJsArrayFile }  from "./lib/rows-to-ts-array/writeRowsToTsArrayFile";
+import { getRowsAndHeadersFromFile }  from "./lib/file-io/readCsvFile";
+import { reportErrors, reportSuccess } from "./lib/file-io/writeFiles";
+import { getLanCodesAndInitials } from "./lib/lang-code-initials/getLanCodesAndInitials";
 
-function escapeXml(unsafe) {
-    return unsafe.replace(/[<>&'"]/g, (c) => {
+export function escapeXml(unsafe: string) {
+    return unsafe.replace(/[<>&'"]/g, (c: string) => {
         switch (c) {
             case '<': return '&lt;';
             case '>': return '&gt;';
             case '&': return '&amp;';
             case '"': return '&quot;';
             case '\'': return '&apos;';
+            default: return c
         }
     });
 }
 
-async function generateFiles(
+export async function generateFiles(
     inputFileName = "Translate.csv",
     { projectName = "projectname", silent = true } = {},
 ) {
@@ -33,19 +34,19 @@ async function generateFiles(
         }
 
         const lancodesAndInitials = headers.slice(2);
-        const [lanCodes, initials] = getLanCodesAndInitials(lancodesAndInitials);
+        const [lanCodes, initials] = getLanCodesAndInitials(lancodesAndInitials as any);
         const resxFileNames = lanCodes.map((lanCode) => `./${projectName}.${lanCode}.resx`);
 
         const resxFiles = resxFileNames.map((fileName, index) => {
-            const lanCode = lanCodes[index];
-            const initial = initials[index];
+            // const lanCode = lanCodes[index];
+            // const initial = initials[index];
             const keyName = lancodesAndInitials[index];
             const stringsToFile = rows.map((row) => {
                 return [escapeXml(row.Name), escapeXml(row.Comment), escapeXml(row[keyName])];
             });
             return {
-                lanCode,
-                initial,
+                // lanCode,
+                // initial,
                 stringsToFile,
                 fileName,
             };
@@ -53,7 +54,7 @@ async function generateFiles(
 
         const jsMapFileJob = await writeRowsToJsArrayFile(rows, lancodesAndInitials, projectName);
 
-        const resxFileJobs = await writeResxFiles(resxFiles);
+        const resxFileJobs = await writeResxFiles(resxFiles as any);
 
         if (!silent) {
             reportErrors(jsMapFileJob);
@@ -69,4 +70,3 @@ async function generateFiles(
         throw error;
     }
 }
-exports.generateFiles = generateFiles;

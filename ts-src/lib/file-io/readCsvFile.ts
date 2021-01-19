@@ -1,42 +1,44 @@
-const fs = require("fs");
-const csv = require("csv-parser");
+import fs from "fs";
+import csv from "csv-parser";
 
 // https://blog.theodo.com/2017/04/csv-excel-escape-from-the-encoding-hell-in-nodejs/
 // https://stackoverflow.com/questions/32375816/node-js-change-csv-file-encoding-programatically-and-parse-to-json
-const iconv = require("iconv-lite");
+import iconv from "iconv-lite";
+import type { Rows, Row } from "../../types/types";
 
-async function getRowsAndHeadersFromFile(filename) {
-    const rows = {};
-    const headers = {};
+export async function getRowsAndHeadersFromFile(filename: string): Promise<[Row[], string[]]> {
+    const rows: Rows = {};
+    const headers: { [uniqueKey: string]: boolean } = {};
 
     return new Promise((res, rej) => {
         fs.createReadStream(filename)
             .pipe(iconv.decodeStream("utf-8"))
             .pipe(
-                csv({
+                (csv({
                     separator: ";",
                     mapHeaders: ({ header, index }) => {
-                        if(header) {
+                        if (header) {
                             headers[header] = true;
                         }
-                        if(index === 0) {
-                            return "Name"
+                        if (index === 0) {
+                            return "Name";
                         }
-                        if(index === 1) {
-                            return "Comment"
+                        if (index === 1) {
+                            return "Comment";
                         }
-                        if(header) {
+                        if (header) {
                             return header;
                         }
+                        return null;
                     },
                     mapValues: ({ value, header }) => {
                         if (header) {
                             return value;
                         }
                     },
-                }),
+                } as any) as csv.CsvParser),
             )
-            .on("data", (row) => {
+            .on("data", (row: any) => {
                 rows[row.Name] = row;
             })
             .on("end", () => {
@@ -48,4 +50,3 @@ async function getRowsAndHeadersFromFile(filename) {
     });
 }
 
-exports.getRowsAndHeadersFromFile = getRowsAndHeadersFromFile;
