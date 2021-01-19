@@ -1,5 +1,7 @@
+// import type { Row } from "../../types/types";
 
-function renderResxTemplate(...strings) {
+// export function renderResxTemplate(...strings: [string, string, string][]) {
+export function renderResxTemplate(...strings: string[]) {
     return `<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root"
@@ -90,8 +92,8 @@ function renderResxTemplate(...strings) {
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  ${strings.reduce((renderString, rowToFile) => {
-      const string = renderTranslationNode(...rowToFile);
+  ${(strings as any).reduce((renderString: string, rowToFile: [string, string, string]) => {
+      const string: string = renderTranslationNode(...rowToFile);
       return (renderString += "\n" + string);
   }, "")}
 </root>
@@ -99,7 +101,7 @@ function renderResxTemplate(...strings) {
 }
 exports.renderResxTemplate = renderResxTemplate;
 
-function renderTranslationNode(name, comment, value) {
+function renderTranslationNode(name: string, comment: string, value: string) {
     return `  <data name="${name}" xml:space="preserve">
     <value>${value}</value>
     <comment>${comment}</comment>

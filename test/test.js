@@ -1,6 +1,5 @@
 const fs = require("fs");
-const { generateFiles } = require("../src/generateFiles");
-const { makeCsvTemplateFile } = require("../src/makeCsvTemplateFile");
+const { makeCsvTemplateFile, generateFiles } = require("../dist/index");
 
 process.on("unhandledRejection", (result, error) => {
     process.exit(1);
