@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "node test/test.js",
+    "start": "rollup --config ./rollup.config.js",
     "start2": "tsc ./tsIndex.ts",
-    "start3": "rollup --config ./rollup.config.js",
-    "start": "nodemon --exec 'node ./test/test.js' --watch src --watch test"
+    "start3": "nodemon --exec 'node ./test/test.js' --watch src --watch test"
   },
   "keywords": [],
   "author": "",
