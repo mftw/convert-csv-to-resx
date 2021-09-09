@@ -31,7 +31,7 @@ export type ${typeName} = keyof typeof defaultStrings;
 `;
 }
 
-export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows, projectName: string) {
+export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows, projectName: string, outputFolder?: string) {
     const lanCodes = getLanCodesAndInitials(lancodesAndInitials);
     const namesWithTranslations = rows.reduce((acc: Row, row) => {
         const [[nameKey, nameValue], [commentName, commentValue], ...langs] = Object.entries(row);
@@ -56,7 +56,7 @@ export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows
         return acc;
     }, {} as Row );
     const file = {
-        fileName: "./" + projectName + "-locales.ts",
+        fileName: (outputFolder || "./") + projectName + "-locales.ts",
         stringsToFile: [namesWithTranslations, lanCodes, rows],
     };
     return writeFile(file as any, renderTemplate as any);
