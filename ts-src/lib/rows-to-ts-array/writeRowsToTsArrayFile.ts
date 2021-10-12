@@ -1,14 +1,18 @@
+import path from "path";
 import { writeFile } from "../file-io/writeFiles";
 import { getLanCodesAndInitials } from "../lang-code-initials/getLanCodesAndInitials";
 import type { RawRows, Row } from "../../types/types";
 
-function renderTemplate(languageMap: any, [lanCodes, initials, lancodesAndInitials]: [string[], string[], string[]], rows: Row[]) {
-
+function renderTemplate(
+    languageMap: any,
+    [lanCodes, initials, lancodesAndInitials]: [string[], string[], string[]],
+    rows: Row[],
+) {
     const typeName = "TranslateNames";
     return `export const defaultStrings = ${JSON.stringify(languageMap, null, 4)};
     
 export const translatedComponents = ${JSON.stringify(
-        rows.map((row) => row.Name),
+        rows.map(row => row.Name),
         null,
         4,
     )};
@@ -31,16 +35,21 @@ export type ${typeName} = keyof typeof defaultStrings;
 `;
 }
 
-export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows, projectName: string, outputFolder?: string) {
+export function writeRowsToJsArrayFile(
+    rows: Row[],
+    lancodesAndInitials: RawRows,
+    projectName: string,
+    outputFolder?: string,
+) {
     const lanCodes = getLanCodesAndInitials(lancodesAndInitials);
     const namesWithTranslations = rows.reduce((acc: Row, row) => {
         const [[nameKey, nameValue], [commentName, commentValue], ...langs] = Object.entries(row);
         const deault1033 = langs.reduce((acc, [lang, value]) => {
-            if(lang.includes("1033") && value) {
-                return value
+            if (lang.includes("1033") && value) {
+                return value;
             }
-            return acc
-        }, "No default translation")
+            return acc;
+        }, "No default translation");
         acc[nameValue] = deault1033;
         // acc[nameValue] = Object.fromEntries([
         //     [commentName, commentValue],
@@ -54,11 +63,11 @@ export function writeRowsToJsArrayFile(rows: Row[], lancodesAndInitials: RawRows
         // ]);
 
         return acc;
-    }, {} as Row );
+    }, {} as Row);
     const file = {
-        fileName: (outputFolder || "./") + projectName + "-locales.ts",
+        // fileName: (outputFolder || "./") + projectName + "-locales.ts",
+        fileName: path.join((outputFolder || process.cwd()), projectName + "-locales.ts"),
         stringsToFile: [namesWithTranslations, lanCodes, rows],
     };
     return writeFile(file as any, renderTemplate as any);
 }
-

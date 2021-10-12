@@ -1,5 +1,5 @@
 import fs from "fs";
-import csv from "csv-parser";
+import csv, { CsvParser } from "csv-parser";
 
 // https://blog.theodo.com/2017/04/csv-excel-escape-from-the-encoding-hell-in-nodejs/
 // https://stackoverflow.com/questions/32375816/node-js-change-csv-file-encoding-programatically-and-parse-to-json
@@ -14,7 +14,7 @@ export async function getRowsAndHeadersFromFile(filename: string): Promise<[Row[
         fs.createReadStream(filename)
             .pipe(iconv.decodeStream("utf-8"))
             .pipe(
-                (csv({
+                csv({
                     separator: ";",
                     mapHeaders: ({ header, index }) => {
                         if (header) {
@@ -36,7 +36,7 @@ export async function getRowsAndHeadersFromFile(filename: string): Promise<[Row[
                             return value;
                         }
                     },
-                } as any) as csv.CsvParser),
+                }) as CsvParser,
             )
             .on("data", (row: any) => {
                 rows[row.Name] = row;
@@ -49,4 +49,3 @@ export async function getRowsAndHeadersFromFile(filename: string): Promise<[Row[
             });
     });
 }
-

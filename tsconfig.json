@@ -29,6 +29,7 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     // "types": ["jest"]
+    "strict": true
   },
   "include": ["./ts-src/**/*.ts", "./ts-src/**/*.tsx"]
 }

@@ -21,6 +21,6 @@ export function getLanCodesAndInitials(raw: RawRows) {
           initials.push(initial);
           return splittedLanCodesAndInitials;
       },
-      [[], [], raw],
+      [[], [], raw] as [string[], string[], string[]],
   );
 }

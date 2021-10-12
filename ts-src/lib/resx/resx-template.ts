@@ -1,6 +1,4 @@
-// import type { Row } from "../../types/types";
 
-// export function renderResxTemplate(...strings: [string, string, string][]) {
 export function renderResxTemplate(...strings: string[]) {
     return `<?xml version="1.0" encoding="utf-8"?>
 <root>
@@ -92,20 +90,21 @@ export function renderResxTemplate(...strings: string[]) {
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  ${(strings as any).reduce((renderString: string, rowToFile: [string, string, string]) => {
-      const string: string = renderTranslationNode(...rowToFile);
-      return (renderString += "\n" + string);
-  }, "")}
+  ${
+      // This is pretty hacky but works for now. Consider another model
+      (strings as any[]).reduce((renderString: string, rowToFile: [string, string, string]) => {
+          const string: string = renderTranslationNode(...rowToFile);
+          return (renderString += "\n" + string);
+      }, "")
+  }
 </root>
 `;
 }
-exports.renderResxTemplate = renderResxTemplate;
 
-function renderTranslationNode(name: string, comment: string, value: string) {
+export function renderTranslationNode(name: string, comment: string, value: string) {
     return `  <data name="${name}" xml:space="preserve">
     <value>${value}</value>
     <comment>${comment}</comment>
   </data>
 `;
 }
-exports.renderTranslationNode = renderTranslationNode;

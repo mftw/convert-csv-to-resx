@@ -6,4 +6,5 @@ module.exports = {
     semi: true,
     // Number of characters before linebreak insertion
     printWidth: 120,
+    arrowParens: "avoid",
 };

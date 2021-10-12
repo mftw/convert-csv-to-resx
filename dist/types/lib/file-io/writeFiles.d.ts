@@ -4,6 +4,9 @@ export declare function writeFiles(files: File[], renderFn: RenderFileTemplate, 
 declare type FileJobOrJobs = FileJob | FileJob[];
 export declare function reportErrors(fileJobsOrJob: FileJobOrJobs): void;
 export declare function reportSuccess(fileJobsOrJob: FileJobOrJobs, { verbose }?: {
-    verbose?: boolean;
+    verbose?: boolean | undefined;
 }): void;
+export declare function reportStatus(fileJobsOrJob: FileJobOrJobs, { verbose }?: {
+    verbose?: boolean | undefined;
+}): FileJob[];
 export {};
