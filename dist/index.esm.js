@@ -1,5 +1,5 @@
 /*!
- * csv-to-resx v1.9.3
+ * csv-to-resx v1.9.4
  * (c) 
  * Released under the MIT License.
  */

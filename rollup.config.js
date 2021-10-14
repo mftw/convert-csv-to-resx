@@ -39,12 +39,12 @@ const options = {
     input: "./ts-src/index.ts",
     output: [
         createOutputOptions({
-            file: "./dist/index.cjs.js",
+            file: "./dist/index.js",
             format: "commonjs",
             plugins: [terser()],
         }),
         createOutputOptions({
-            file: "./dist/index.js",
+            file: "./dist/index.esm.js",
             format: "esm",
             plugins: [terser()],
         }),
