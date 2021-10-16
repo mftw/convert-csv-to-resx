@@ -1,8 +1,9 @@
 const fs = require("fs");
 const { makeCsvTemplateFile, generateFiles } = require("../dist/index");
 
-process.on("unhandledRejection", (result, error) => {
-    process.exit(1);
+process.on("unhandledRejection", (error) => {
+    // process.exit(1);
+    throw error
 });
 
 (async () => {

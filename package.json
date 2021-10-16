@@ -1,6 +1,6 @@
 {
   "name": "csv-to-resx",
-  "version": "1.9.41",
+  "version": "1.9.42",
   "description": "Convert a .csv file to .resx files",
   "main": "dist/index.js",
   "scripts": {
